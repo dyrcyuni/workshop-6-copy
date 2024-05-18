@@ -42,6 +42,7 @@ public class PageIndex implements Handler {
                 <a href='/'>Homepage</a>
                 <a href='movies.html'>List All Movies</a>
                 <a href='moviestype.html'>Get Movies by Type</a>
+                <a href='directormovies.html'>Get Movies by Director</a>
             </div>
         """;
 
