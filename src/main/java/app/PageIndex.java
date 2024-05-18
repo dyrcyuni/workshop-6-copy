@@ -64,6 +64,7 @@ public class PageIndex implements Handler {
             <ul>
                 <li> <a href='movies.html'>List all Movies</a> </li>
                 <li> <a href='moviestype.html'>Get Movies by Type</a> </li>
+                <li> <a href='directormovies.html'>Get Movies by Director</a> </li>
             </ul>
             """;
 

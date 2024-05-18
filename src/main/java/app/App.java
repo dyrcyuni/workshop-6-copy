@@ -43,9 +43,11 @@ public class App {
         app.get(PageIndex.URL, new PageIndex());
         app.get(PageMoviesList.URL, new PageMoviesList());      
         app.get(PageMoviesType.URL, new PageMoviesType());
+        app.get(PageDirectorMovies.URL, new PageDirectorMovies());
 
         // POST pages can accept form data
         app.post(PageMoviesType.URL, new PageMoviesType());
+        app.post(PageDirectorMovies.URL, new PageDirectorMovies());
     }
 
 }
