@@ -92,6 +92,54 @@ public class JDBCConnection {
         return movies;
     }
 
+    public static ArrayList<String> getMovieTypes() {
+        ArrayList<String> movieTypes = new ArrayList<String>();
+
+        // Setup the variable for the JDBC connection
+        Connection connection = null;
+
+        try {
+            // Connect to JDBC data base
+            connection = DriverManager.getConnection(DATABASE);
+
+            // Prepare a new SQL Query & Set a timeout
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+
+            // The Query
+            String query = "SELECT DISTINCT MvType FROM movie";
+            
+            // Get Result
+            ResultSet results = statement.executeQuery(query);
+
+            while (results.next()) {
+
+                String movieType    = results.getString("MvType");
+
+                movieTypes.add(movieType);
+            }
+
+            // Close the statement because we are done with it
+            statement.close();
+        } catch (SQLException e) {
+            // If there is an error, lets just pring the error
+            System.err.println(e.getMessage());
+        } finally {
+            // Safety code to cleanup
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
+
+        // Finally we return all of the movies
+        return movieTypes;
+    }
+
     /**
      * Get all the movies in the database by a given type.
      * Note this takes a string of the type as an argument!

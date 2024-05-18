@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
 /**
  * Example Index HTML class using Javalin
  * <p>
@@ -32,8 +31,8 @@ public class PageMoviesType implements Handler {
         String html = "<html>";
 
         // Add some Head information
-        html = html + "<head>" + 
-               "<title>Movies by Type</title>";
+        html = html + "<head>" +
+                "<title>Movies by Type</title>";
 
         // Add some CSS (external file)
         html = html + "<link rel='stylesheet' type='text/css' href='common.css' />";
@@ -45,42 +44,46 @@ public class PageMoviesType implements Handler {
         // Add the topnav
         // This uses a Java v15+ Text Block
         html = html + """
-            <div class='topnav'>
-                <a href='/'>Homepage</a>
-                <a href='movies.html'>List All Movies</a>
-                <a href='moviestype.html'>Get Movies by Type</a>
-            </div>
-        """;
+                    <div class='topnav'>
+                        <a href='/'>Homepage</a>
+                        <a href='movies.html'>List All Movies</a>
+                        <a href='moviestype.html'>Get Movies by Type</a>
+                    </div>
+                """;
 
         // Add header content block
         html = html + """
-            <div class='header'>
-                <h1>
-                    List Movies by Type
-                </h1>
-            </div>
-        """;
+                    <div class='header'>
+                        <h1>
+                            List Movies by Type
+                        </h1>
+                    </div>
+                """;
 
         // Add Div for page Content
         html = html + "<div class='content'>";
 
-        /* Add HTML for the web form
+        ArrayList<String> movieTypes = JDBCConnection.getMovieTypes();
+
+        /*
+         * Add HTML for the web form
          * We are giving two ways here
-         *  - one for a text box
-         *  - one for a drop down
+         * - one for a text box
+         * - one for a drop down
          * 
          * Whitespace is used to help us understand the HTML!
          * 
          * IMPORTANT! the action speicifes the URL for POST!
          */
         html = html + "<form action='/moviestype.html' method='post'>";
-        
+
         html = html + "   <div class='form-group'>";
         html = html + "      <label for='movietype_drop'>Select the type Movie Type (Dropdown):</label>";
         html = html + "      <select id='movietype_drop' name='movietype_drop'>";
-        html = html + "         <option>HORROR</option>";
-        html = html + "         <option>COMEDY</option>";
-        html = html + "         <option>DRAMA</option>";
+        for (String movieType : movieTypes) {
+            System.out.println(movieType);
+            html = html + "         <option>" + movieType + "</option>";
+        }
         html = html + "      </select>";
         html = html + "   </div>";
 
@@ -93,11 +96,12 @@ public class PageMoviesType implements Handler {
 
         html = html + "</form>";
 
-        /* Get the Form Data
-         *  from the drop down list
+        /*
+         * Get the Form Data
+         * from the drop down list
          * Need to be Careful!!
-         *  If the form is not filled in, then the form will return null!
-        */
+         * If the form is not filled in, then the form will return null!
+         */
         String movietype_drop = context.formParam("movietype_drop");
         // String movietype_drop = context.queryParam("movietype_drop");
         if (movietype_drop == null) {
@@ -122,10 +126,10 @@ public class PageMoviesType implements Handler {
 
         // Footer
         html = html + """
-            <div class='footer'>
-                <p>COSC2803 Module 0 - Week 06</p>
-            </div>
-        """;
+                    <div class='footer'>
+                        <p>COSC2803 Module 0 - Week 06</p>
+                    </div>
+                """;
 
         // DO NOT MODIFY THIS
         // Makes Javalin render the webpage
@@ -138,7 +142,7 @@ public class PageMoviesType implements Handler {
 
         // Look up movies from JDBC
         ArrayList<String> movieTitles = getMoviesByType(type);
-        
+
         // Add HTML for the movies list
         html = html + "<ul>";
         for (String title : movieTitles) {
@@ -151,10 +155,10 @@ public class PageMoviesType implements Handler {
         // Uncomment the code to use the JDBCConnection Objects example(s)
         JDBCConnection jdbc = new JDBCConnection();
         ArrayList<Movie> movies = jdbc.getMoviesByType(type);
-        html = html + "<h2>" + 
-                      type +
-                      " Movies with Years (from JDBCConnection)</h2>" +
-                      "<ul>";
+        html = html + "<h2>" +
+                type +
+                " Movies with Years (from JDBCConnection)</h2>" +
+                "<ul>";
         for (Movie movie : movies) {
             html = html + "<li>" + movie.name + " was made in " + movie.year + "</li>";
         }
@@ -186,7 +190,7 @@ public class PageMoviesType implements Handler {
             // The Query
             String query = "SELECT * FROM movie WHERE mvtype = '" + movieType + "'";
             System.out.println(query);
-            
+
             // Get Result
             ResultSet results = statement.executeQuery(query);
 
