@@ -69,8 +69,8 @@ public class PageDirectorMovies implements Handler {
         html = html + "<form action='/directormovies.html' method='post'>";
 
         html = html + "   <div class='form-group'>";
-        html = html + "      <label for='movietype_drop'>Select the type Movie Type (Dropdown):</label>";
-        html = html + "      <select id='movietype_drop' name='movietype_drop'>";
+        html = html + "      <label for='director_drop'>Select the director (Dropdown):</label>";
+        html = html + "      <select id='director_drop' name='director_drop'>";
         for (String dirName : directors) {
             System.out.println(dirName);
             html = html + "         <option>" + dirName + "</option>";
@@ -79,8 +79,8 @@ public class PageDirectorMovies implements Handler {
         html = html + "   </div>";
 
         html = html + "   <div class='form-group'>";
-        html = html + "      <label for='movietype_textbox'>Select the type Movie Type (Textbox)</label>";
-        html = html + "      <input class='form-control' id='movietype_textbox' name='movietype_textbox'>";
+        html = html + "      <label for='director_textbox'>Select the director (Textbox)</label>";
+        html = html + "      <input class='form-control' id='director_textbox' name='director_textbox'>";
         html = html + "   </div>";
 
         html = html + "   <button type='submit' class='btn btn-primary'>Get all of the movies!</button>";
@@ -93,23 +93,23 @@ public class PageDirectorMovies implements Handler {
          * Need to be Careful!!
          * If the form is not filled in, then the form will return null!
          */
-        String movietype_drop = context.formParam("movietype_drop");
+        String director_drop = context.formParam("director_drop");
         // String movietype_drop = context.queryParam("movietype_drop");
-        if (movietype_drop == null) {
+        if (director_drop == null) {
             // If NULL, nothing to show, therefore we make some "no results" HTML
             html = html + "<h2><i>No Results to show for dropbox</i></h2>";
         } else {
             // If NOT NULL, then lookup the movie by type!
-            html = html + outputMovies(movietype_drop);
+            html = html + outputMovies(director_drop);
         }
 
-        String movietype_textbox = context.formParam("movietype_textbox");
-        if (movietype_textbox == null || movietype_textbox == "") {
+        String director_textbox = context.formParam("director_textbox");
+        if (director_textbox == null || director_textbox == "") {
             // If NULL, nothing to show, therefore we make some "no results" HTML
             html = html + "<h2><i>No Results to show for textbox</i></h2>";
         } else {
             // If NOT NULL, then lookup the movie by type!
-            html = html + outputMovies(movietype_textbox);
+            html = html + outputMovies(director_textbox);
         }
 
         // Close Content div
