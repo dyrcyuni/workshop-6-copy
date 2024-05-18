@@ -130,8 +130,29 @@ public class PageDirectorMovies implements Handler {
 
     public String outputMovies(String dirName) {
         String html = "";
-        html = html + "<h2>" + dirName + " Movies</h2>";
 
+        JDBCConnection jdbc = new JDBCConnection();
+        ArrayList<MovieAndStars> moviesAndStars = jdbc.getMoviesAndStarsByDirector(dirName);
+        html = html + "<h2>" +
+                dirName +
+                " Movies with Years (from JDBCConnection) -- including movie stars</h2>" +
+                "<table><tr><th>Movie Name</th><th>Year</th><th>Stars</th></tr>";
+        for (MovieAndStars movie : moviesAndStars) {
+            html = html + "<tr><td>"
+                    + movie.name + "</td><td>" + movie.year
+                    + "</td><td>";
+            for (int i = 0; i < movie.stars.size(); i++) {
+                String star = movie.stars.get(i);
+                if (i > 0) {
+                    html += " and";
+                }
+                html += " " + star;
+            }
+            html += "</td></tr>";
+        }
+        html = html + "</table>";
+
+        html = html + "<h2>" + dirName + " Movies</h2>";
         // Look up movies from JDBC
         ArrayList<String> movieTitles = getMoviesByDirector(dirName);
 
@@ -145,7 +166,6 @@ public class PageDirectorMovies implements Handler {
         // 🚨 This block of code is for Pre-Req students.
         // Altneratively we can use JDBCConnection to add HTML for the movies list
         // Uncomment the code to use the JDBCConnection Objects example(s)
-        JDBCConnection jdbc = new JDBCConnection();
         ArrayList<Movie> movies = jdbc.getMoviesByDirector(dirName);
         html = html + "<h2>" +
                 dirName +
@@ -180,7 +200,8 @@ public class PageDirectorMovies implements Handler {
             statement.setQueryTimeout(30);
 
             // The Query
-            String query = "SELECT * FROM Movie JOIN Director ON Movie.DirNumb = Director.DirNumb WHERE Director.DirName = '" + dirName + "';";
+            String query = "SELECT * FROM Movie JOIN Director ON Movie.DirNumb = Director.DirNumb WHERE Director.DirName = '"
+                    + dirName + "';";
             System.out.println(query);
 
             // Get Result
@@ -215,4 +236,3 @@ public class PageDirectorMovies implements Handler {
     }
 
 }
-
