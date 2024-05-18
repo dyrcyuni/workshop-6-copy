@@ -54,7 +54,7 @@ public class PageDirectorMovies implements Handler {
         // Add Div for page Content
         html = html + "<div class='content'>";
 
-        ArrayList<String> movieTypes = JDBCConnection.getDirectors();
+        ArrayList<String> directors = JDBCConnection.getDirectors();
 
         /*
          * Add HTML for the web form
@@ -71,9 +71,9 @@ public class PageDirectorMovies implements Handler {
         html = html + "   <div class='form-group'>";
         html = html + "      <label for='movietype_drop'>Select the type Movie Type (Dropdown):</label>";
         html = html + "      <select id='movietype_drop' name='movietype_drop'>";
-        for (String movieType : movieTypes) {
-            System.out.println(movieType);
-            html = html + "         <option>" + movieType + "</option>";
+        for (String dirName : directors) {
+            System.out.println(dirName);
+            html = html + "         <option>" + dirName + "</option>";
         }
         html = html + "      </select>";
         html = html + "   </div>";
@@ -145,7 +145,7 @@ public class PageDirectorMovies implements Handler {
         // Altneratively we can use JDBCConnection to add HTML for the movies list
         // Uncomment the code to use the JDBCConnection Objects example(s)
         JDBCConnection jdbc = new JDBCConnection();
-        ArrayList<Movie> movies = jdbc.getMoviesByType(dirName);
+        ArrayList<Movie> movies = jdbc.getMoviesByDirector(dirName);
         html = html + "<h2>" +
                 dirName +
                 " Movies with Years (from JDBCConnection)</h2>" +

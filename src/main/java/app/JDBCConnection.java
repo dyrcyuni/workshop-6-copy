@@ -141,7 +141,7 @@ public class JDBCConnection {
     }
 
     public static ArrayList<String> getDirectors() {
-        ArrayList<String> directors = new ArrayList<String>();
+        ArrayList<String> movies = new ArrayList<String>();
 
         // Setup the variable for the JDBC connection
         Connection connection = null;
@@ -165,7 +165,7 @@ public class JDBCConnection {
             while (results.next()) {
                 String title = results.getString("DirName");
 
-                directors.add(title);
+                movies.add(title);
             }
 
             // Close the statement because we are done with it
@@ -186,7 +186,62 @@ public class JDBCConnection {
         }
 
         // Finally we return all of the movies
-        return directors;
+        return movies;
+    }
+    
+    public ArrayList<Movie> getMoviesByDirector(String dirName) {
+        ArrayList<Movie> movies = new ArrayList<Movie>();
+
+        // Setup the variable for the JDBC connection
+        Connection connection = null;
+
+        try {
+            // Connect to JDBC data base
+            connection = DriverManager.getConnection(DATABASE);
+
+            // Prepare a new SQL Query & Set a timeout
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+
+            // The Query
+            String query = "SELECT * FROM Movie JOIN Director ON Movie.DirNumb = Director.DirNumb WHERE Director.DirName = '" + dirName + "';";
+            System.out.println(query);
+            
+            // Get Result
+            ResultSet results = statement.executeQuery(query);
+
+            // Process all of the results
+            while (results.next()) {
+                // Create a Movie Object
+                Movie movie = new Movie();
+
+                movie.id    = results.getInt("mvnumb");
+                movie.name  = results.getString("mvtitle");
+                movie.year  = results.getInt("yrmde");
+                movie.genre = results.getString("mvtype");
+
+                movies.add(movie);
+            }
+
+            // Close the statement because we are done with it
+            statement.close();
+        } catch (SQLException e) {
+            // If there is an error, lets just pring the error
+            System.err.println(e.getMessage());
+        } finally {
+            // Safety code to cleanup
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
+
+        // Finally we return all of the movies
+        return movies;
     }
 
     /**
