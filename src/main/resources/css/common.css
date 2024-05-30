@@ -62,3 +62,11 @@ img.top-image {
    background-color: #cccccc;
    padding: 10px;
  }
+
+table {
+   border-spacing: 30px 0px;
+
+   & th {
+      text-align: left;
+   }
+}
